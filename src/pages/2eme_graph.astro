@@ -1,0 +1,66 @@
+---
+import * as Plot from "@observablehq/plot";
+import PlotFigure from "../components/PlotFigure.astro";
+import industries from "../assets/industries.json";
+import gistemp from "../assets/gistemp.json";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <nav
+    style="background: #002b7b; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;"
+  >
+    <ul
+      style="display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0;"
+    >
+      <li>
+        <a
+          href="/"
+          style="color: #fff; text-decoration: none; font-weight: bold; padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.2s; font-size: 1.25rem;"
+        >
+          Voir les graphiques sur les manchots
+        </a>
+        <a
+          href="/2eme_graph"
+          style="color: #fff; text-decoration: none; font-weight: bold; padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.2s; font-size: 1.25rem;"
+        >
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <h1>Plot + Astro → Graphiques sur les industries et le climat </h1>
+  <h2>Graphique sur les industries et le nombre de chomeurs</h2>
+  <PlotFigure
+    options={{
+      y: { grid: true },
+      color: { legend: true },
+      marks: [
+        Plot.ruleY([0]),
+        Plot.lineY(industries, {
+          x: "date",
+          y: "unemployed",
+          stroke: "industry",
+          tip: "x",
+        }),
+      ],
+    }}
+  />
+
+  <h2 style="margin-top: 2rem;">
+    Graphique sur l'anomalie de la température de surface
+  </h2>
+  <PlotFigure
+    options={{
+      y: {
+        grid: true,
+        tickFormat: "+f",
+        label: "↑ Surface temperature anomaly (°C)",
+      },
+      color: {
+        scheme: "BuRd",
+        legend: true,
+      },
+      marks: [Plot.ruleY([0]), Plot.dot(gistemp, { x: "Date", y: "Anomaly" })],
+    }}
+  />
+</Layout>

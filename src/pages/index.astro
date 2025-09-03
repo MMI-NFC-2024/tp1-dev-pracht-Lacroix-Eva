@@ -1,17 +1,81 @@
 ---
-  import * as Plot from "@observablehq/plot";
-  import PlotFigure from "../components/PlotFigure.astro";
-  import penguins from "../assets/penguins.json";
-  import Layout from "../layouts/Layout.astro";
+import * as Plot from "@observablehq/plot";
+import PlotFigure from "../components/PlotFigure.astro";
+import penguins from "../assets/penguins.json";
+import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-  <h1>Plot + Astro</h1>
+  <nav
+    style="background: #002b7b; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;"
+  >
+    <ul
+      style="display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0;"
+    >
+      <li>
+        <a
+          href="/2eme_graph"
+          style="color: #fff; text-decoration: none; font-weight: bold; padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.2s; font-size: 1.25rem;"
+        >
+          Voir les autres graphiques
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <h1>Plot + Astro → Graphiques sur les manchots</h1>
+  <h2>Graphique sur les culmens du manchots</h2>
   <PlotFigure
     options={{
       marks: [
-        Plot.dot(penguins, {x: 'culmen_length_mm', y: 'culmen_depth_mm'}),
+        Plot.dot(penguins, {
+          x: "culmen_length_mm",
+          y: "culmen_depth_mm",
+          stroke: "species",
+        }),
       ],
-}}
+    }}
+  />
+  <h2 style="margin-top: 2rem;">
+    Graphique sur la masse du corp des manchots suivant l'espece et leur sexe
+  </h2>
+  <PlotFigure
+    options={{
+      y: { grid: true },
+      color: { legend: true },
+      marks: [
+        Plot.dot(
+          penguins,
+          Plot.dodgeX("middle", {
+            fx: "species",
+            y: "body_mass_g",
+            fill: "sex",
+          })
+        ),
+      ],
+    }}
+  />
+
+  <h2 style="margin-top: 2rem;">
+    Graphique sur l'anatomie des manchots
+  </h2>
+  <PlotFigure
+    options={{
+      color: { legend: true },
+      marks: [
+        Plot.voronoi(penguins, {
+          x: "culmen_depth_mm",
+          y: "culmen_length_mm",
+          fill: "species",
+          fillOpacity: 0.2,
+          stroke: "var(--vp-c-bg)",
+        }),
+        Plot.frame(),
+        Plot.dot(penguins, {
+          x: "culmen_depth_mm",
+          y: "culmen_length_mm",
+          fill: "species",
+        }),
+      ],
+    }}
   />
 </Layout>
